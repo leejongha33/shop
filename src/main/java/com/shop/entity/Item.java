@@ -29,6 +29,6 @@ public class Item {
     private String itemDetail;
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus; // 제품 판매 상태
-    private LocalDateTime regTime;
-    private LocalDateTime updateTime;
+    private LocalDateTime regTime; // 등록 시간
+    private LocalDateTime updateTime; // 수정 시간
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +21,7 @@ class ItemRepositoryTest {
     ItemRepository itemRepository;
 
     @Test
-    @DisplayName("상품 저장 테스트")
+    @DisplayName("상품 생성 테스트")
     public void createItemTest() {
 
         Item item = new Item();
@@ -38,4 +39,26 @@ class ItemRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("상품 조회 테스트")
+    public void findByItemNmTest() {
+
+        this.createItemTest();
+        List<Item> itemList = itemRepository.findByItemNm("테스트 상품");
+
+        for (Item item : itemList) {
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("상품명, 상품상세설명 or 테스트")
+    public void findByItemNmOrItemDetailTest() {
+
+        this.createItemTest();
+        List<Item> itemList = itemRepository.findByItemNumberOrItemDetail("테스트 상품", "상품 설명");
+
+        for (Item item : itemList) {
+            System.out.println(item.toString());        }
+    }
 }

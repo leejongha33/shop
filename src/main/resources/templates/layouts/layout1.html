@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultrq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 
     <link rel="stylesheet" herf="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--    <link th:herf="@{/css/layout1.css}" rel="stylesheet">-->
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
@@ -16,9 +17,11 @@
 </head>
 <body>
     <div th:replace="fragments/header::header"></div>
-    <div layout:fragmen="content">
-        본문 영역
+
+    <div layout:fragment="content" class="content">
+
     </div>
+
     <div th:replace="fragments/footer::footer"></div>
 </body>
 </html>

@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -49,6 +49,22 @@ public class MemberServiceTest {
         assertEquals(member.getAddress(), saveMember.getAddress());
         assertEquals(member.getPassword(), saveMember.getPassword());
         assertEquals(member.getRole(), saveMember.getRole());
+    }
+
+    @Test
+    @DisplayName("중복 회원 가입 테스트")
+    public void saveDuplicateMemberTest() {
+
+        Member member1 = new Member();
+        Member member2 = new Member();
+
+        memberService.saveMember(member1);
+
+        Throwable e = assertThrows(IllegalAccessException.class, () -> {
+            memberService.saveMember(member2);
+        });
+
+        assertEquals("이미 가입된 회원입니다.", e.getMessage());
     }
 
 }

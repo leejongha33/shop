@@ -2,8 +2,12 @@ package com.shop.config;
 
 import com.shop.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@ConditionalOnDefaultWebSecurity
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SecurityConfig {
 
     @Autowired
@@ -48,32 +54,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.formLogin()
-                .loginPage("/members/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .failureUrl("/members/login/error")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-                .logoutSuccessUrl("/");
-
-        // 시큐리티 처리에 HttpServletRequest 사용을 의미
-        httpSecurity.authorizeRequests()
-                .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll() // permitAll -> 모든 사용자가 인증업이 해당 경로 접근 가능
-                .mvcMatchers("/admin/**").hasRole("ADMIN") // admin 경로는 ADMIN 권한 유저만 접속가능
-                .anyRequest().authenticated(); // 나머지 설정하지 않은 경로는 모두 사용자 인증 요구
-
-        // 인증되지 않은 사용자가 리소스에 접근하였을때 수행되는 핸들러 등록
-        httpSecurity.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-    }
-
-    @Bean
-    public void configure(WebSecurity web) throws Exception {
-        // static 디렉토리 하위 파일은 인증 무시하도록 설정
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**");
-    }
 }

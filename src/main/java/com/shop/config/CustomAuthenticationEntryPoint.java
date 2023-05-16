@@ -12,7 +12,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+
+        // ajax의 경우 http request header에 XMLHttpRequest 값이 세팅되는데 인증되지 않은 사용자의 경우 "Unauthorized" 에러 발생 따라서 로그인 페이지로 이동
+        if ("XMLHttpRequest".equals(request.getHeader("x-requested-with"))) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        } else {
+            response.sendRedirect("/member/login");
+        }
     }
 
 }

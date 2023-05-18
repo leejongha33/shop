@@ -26,8 +26,8 @@ class ItemControllerTest {
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void itemFormTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/item/new"))
-                .andDo(print())
-                .andExpect(status().isOk());
+               .andDo(print())
+               .andExpect(status().isOk());
     }
 
     @Test
@@ -35,7 +35,7 @@ class ItemControllerTest {
     @WithMockUser(username = "user", roles = "USER")
     public void itemFormNotAdminTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/item/new"))
-                .andDo(print())
-                .andExpect(status().isForbidden());
+               .andDo(print())
+               .andExpect(status().isForbidden());
     }
 }
